@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>TOP-C | The Other Playing Cards</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Decorative scallops (top) -->
+  <div class="scallop scallop-top" aria-hidden="true"></div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#home" aria-label="TOP-C Home">
+        <img src="assets/logo.png" alt="TOP-C Logo" class="brand-logo" />
+      </a>
+
+      <nav class="main-nav" aria-label="Primary">
+        <a href="#home">Home</a>
+        <a href="#shop">Shop</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">☰</button>
+    </div>
+  </header>
+
+  <!-- HERO / HOME -->
+  <main id="home" class="hero">
+    <div class="container hero-grid">
+      <!-- Left “paper” panel -->
+      <section class="paper">
+        <div class="paper-inner">
+          <div class="welcome-row">
+            <span class="flourish" aria-hidden="true">🕊️</span>
+            <p class="welcome">Welcome to <span class="brand-accent">TOP-C</span> Playing Cards</p>
+            <span class="flourish" aria-hidden="true">🕊️</span>
+          </div>
+
+          <!-- Tagline with red initial letters -->
+          <p class="tagline">
+            <span class="red-initial">T</span>he
+            <span class="red-initial">O</span>ther
+            <span class="red-initial">P</span>laying
+            <span class="red-initial">C</span>ards
+            — Where Tradition Meets Purpose
+          </p>
+
+          <p>Our card games are designed to help you find fun while learning the <strong>Word of God</strong>.
+            These Card Games offer Strategy and a Fresh Challenge to help you be <strong class="accent-gray">“In The Know.”</strong></p>
+
+          <p>Every game in this system promotes wholesome, family-centered fun and engagement. The main decks
+            include the <a href="#shop">New Testament Deck</a>, the <a href="#shop">Old Testament Deck</a>, and the
+            <a href="#shop">Junior Version</a> — all rooted in the content of the Bible.</p>
+
+          <p class="minihead">We utilize the Whole Bible for all of the adult games:</p>
+          <ul class="bullets">
+            <li>• New Testament Version</li>
+            <li>• Old Testament Version</li>
+            <li>• Junior Version</li>
+          </ul>
+
+          <ul class="benefits">
+            <li>📘 <span class="accent-red">Decks inspired</span> by the Books of the Bible</li>
+            <li>🎖️ <span class="accent-red">Over 16 original games</span> — including <em>Bible Bid</em>, <em>Spread Love</em>, <em>Fly Over</em>, and <em>Declaration</em></li>
+            <li>🧩 <span class="accent-red">Play solo, 1-on-1, or in strategic</span> team formats</li>
+            <li>⚖️ Based on CHS — Chronological Hierarchy Structure™. Patent Pending</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Right hero art + CTA -->
+      <aside class="hero-art">
+        <img src="assets/card-array.png" alt="TOP-C Card Array" class="hero-img" />
+        <a class="cta-large" href="#shop">Buy Cards Now</a>
+      </aside>
+    </div>
+  </main>
+
+  <!-- SHOP -->
+  <section id="shop" class="shop section">
+    <div class="container">
+      <h2>Shop</h2>
+      <p class="subhead">Explore decks and game packs aligned to the content above.</p>
+
+      <div class="product-grid">
+        <!-- New Testament Deck -->
+        <article class="product-card">
+          <img src="assets/new-testament-deck.png" alt="New Testament Deck" class="product-media" />
+          <h3>New Testament Deck</h3>
+          <p>Wholesome, strategy-driven play anchored in the New Testament.</p>
+          <p class="price">$25.95</p>
+          <a href="https://www.jotform.com/app/top-c-cards/top-c" target="_blank" class="btn">Add to Cart</a>
+        </article>
+
+        <!-- Old Testament Deck -->
+        <article class="product-card">
+          <img src="assets/old-testament-deck.png" alt="Old Testament Deck" class="product-media" />
+          <h3>Old Testament Deck</h3>
+          <p>Classic narratives and wisdom literature reimagined for card play.</p>
+          <p class="price">$29.95</p>
+          <a href="https://www.jotform.com/app/top-c-cards/top-c" target="_blank" class="btn">Add to Cart</a>
+        </article>
+
+        <!-- Junior Version -->
+        <article class="product-card">
+          <div class="product-media placeholder" aria-label="Junior Version placeholder"></div>
+          <h3>Junior Version</h3>
+          <p>Kid-friendly learning and family fun — accessible and engaging.</p>
+          <p class="price">$15.95</p>
+          <a href="https://www.jotform.com/app/top-c-cards/top-c" target="_blank" class="btn">Add to Cart</a>
+        </article>
+
+        <!-- TOP-C Rule Book -->
+        <article class="product-card">
+          <div class="product-media placeholder" aria-label="TOP-C Rule Book placeholder"></div>
+          <h3>TOP-C Rule Book</h3>
+          <p>Comprehensive guide with clear rules and quick-start instructions for every game.</p>
+          <a href="https://www.jotform.com/app/top-c-cards/top-c" target="_blank" class="btn">Add to Cart</a>
+        </article>
+
+        <!-- T-Shirts Coming Soon -->
+        <article class="product-card">
+          <div class="product-media placeholder" aria-label="T-Shirts Coming Soon placeholder"></div>
+          <h3>T-Shirts Coming Soon</h3>
+          <p>Wear your passion for TOP-C — branded apparel launching shortly.</p>
+          <button class="btn" disabled>Coming Soon</button>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="about section">
+    <div class="container about-grid">
+      <div>
+        <h2>About <span class="brand-accent">TOP-C</span></h2>
+        <p><span class="brand-accent">TOP-C</span> — 
+          <span class="red-initial">T</span>he 
+          <span class="red-initial">O</span>ther 
+          <span class="red-initial">P</span>laying 
+          <span class="red-initial">C</span>ards — delivers fun, strategy, and Scripture-rooted learning in an accessible card-game format.
+          From the New and Old Testament decks to the Junior Version, our portfolio is purpose-built for families, youth groups,
+          and game nights.</p>
+        <p>We prioritize clear rules, high replay value, and content fidelity. With 16+ original games and CHS-aligned structure,
+          we help players be <strong class="accent-navy">“In The Know.”</strong></p>
+      </div>
+      <div class="about-callout">
+        <h3>What’s Inside</h3>
+        <ul>
+          <li><span class="accent-red">Decks inspired</span> by the Books of the Bible</li>
+          <li><span class="accent-red">Solo, versus, and team</span> formats</li>
+          <li><span class="accent-red">Clear rules</span> & quick start guides</li>
+          <li>Family-centered, <span class="accent-blue">screen-free engagement</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="contact section">
+    <div class="container">
+      <h2>Contact</h2>
+      <p class="subhead">Questions or feedback? We’d love to hear from you.</p>
+
+      <form id="contactForm" class="contact-form" novalidate>
+        <div class="form-row">
+          <label for="name">Name</label>
+          <input id="name" name="name" type="text" placeholder="Your name" required>
+        </div>
+
+        <div class="form-row">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" placeholder="you@example.com" required>
+        </div>
+
+        <div class="form-row">
+          <label for="message">Feedback</label>
+          <textarea id="message" name="message" rows="6" placeholder="Share your thoughts…" required></textarea>
+        </div>
+
+        <button class="btn" type="submit">Send</button>
+        <p class="form-note">Or email us directly at <a href="mailto:slee.topc@gmail.com">slee.topc@gmail.com</a>.</p>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="foot-brand">
+        <img src="assets/logo.png" alt="TOP-C Logo" class="brand-logo small" />
+        <p>© <span id="year"></span> <span class="brand-accent">TOP-C</span> — 
+          <span class="red-initial">T</span>he 
+          <span class="red-initial">O</span>ther 
+          <span class="red-initial">P</span>laying 
+          <span class="red-initial">C</span>ards. All rights reserved.
+        </p>
+        <p>Contact: <a href="mailto:slee.topc@gmail.com" class="foot-contact">slee.topc@gmail.com</a></p>
+      </div>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="#home">Home</a>
+        <a href="#shop">Shop</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+  <div class="scallop scallop-bottom" aria-hidden="true"></div>
+
+  <script>
+    // Mobile nav toggle
+    const toggle = document.querySelector('.nav-toggle');
+    const nav = document.querySelector('.main-nav');
+    toggle.addEventListener('click', () => {
+      const open = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', String(!open));
+      nav.classList.toggle('open');
+    });
+
+    // Current year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Contact form -> mailto handoff (no backend required)
+    document.getElementById('contactForm').addEventListener('submit', function(e){
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const message = document.getElementById('message').value.trim();
+
+      if(!name || !email || !message){
+        alert('Please complete all fields.');
+        return;
+      }
+
+      const subject = encodeURIComponent(`Website Inquiry from ${name}`);
+      const body = encodeURIComponent(
+        `Name: ${name}\nEmail: ${email}\n\nFeedback:\n${message}`
+      );
+
+      window.location.href = `mailto:slee.topc@gmail.com?subject=${subject}&body=${body}`;
+    });
+  </script>
+</body>
+</html>
