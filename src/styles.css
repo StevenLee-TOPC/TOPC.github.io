@@ -1,0 +1,81 @@
+@import "tailwindcss";
+
+@theme {
+  --color-navy: #0b2d4a;
+  --color-navy-mid: #113b5f;
+  --color-navy-deep: #08243c;
+  --color-paper: #fffefb;
+  --color-paper-2: #f4f7fb;
+  --color-ink: #1a2433;
+  --color-muted: #5b6b80;
+  --color-brand: #c00000;
+  --color-gold: #f6c945;
+  --color-gold-ink: #16212e;
+  --color-line: #d7e0ea;
+  --font-display: "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-sans: Lora, Georgia, "Times New Roman", serif;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1.125rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2.5rem;
+  --aspect-product: 4 / 3;
+  --ease-out-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--color-navy);
+    color: var(--color-paper);
+    font-family: var(--font-sans);
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+.scallop {
+  height: 1.75rem;
+}
+
+.scallop-top {
+  background: radial-gradient(
+      circle at 1.125rem -0.375rem,
+      var(--color-paper) 1.125rem,
+      transparent 1.1875rem
+    )
+    0 0 / 2.25rem 1.75rem repeat-x;
+}
+
+.scallop-bottom {
+  background: radial-gradient(
+      circle at 1.125rem 2.125rem,
+      var(--color-paper) 1.125rem,
+      transparent 1.1875rem
+    )
+    0 0 / 2.25rem 1.75rem repeat-x;
+}
