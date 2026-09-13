@@ -1166,9 +1166,7 @@
       var need = needsMoreTricks(aiIdx);
       var made = alreadyMade(aiIdx);
 
-      if (partnerWinning && (lastToPlay || partnerBoss)) {
-        var junk = legal.filter(function (c) { return !c.isTrump && !winsWith(c); });
-        if (junk.length) return highestCard(junk);
+      if (partnerWinning && !partnerNil) {
         return lowestCard(duckingCards());
       }
 
