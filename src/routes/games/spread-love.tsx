@@ -10,7 +10,7 @@ import {
   SPREAD_LOVE_UNLOCK_KEY,
 } from "@/lib/catalog";
 
-const GAME_HREF = "/spread-love/index.html";
+const GAME_HREF = "/spread-love/index.html?v=20260913e";
 
 export const Route = createFileRoute("/games/spread-love")({
   component: SpreadLoveEarlyAccess,
