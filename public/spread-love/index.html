@@ -272,10 +272,12 @@
       z-index: 100 !important; 
     }
     .card-btn:disabled {
-      cursor: not-allowed;
+      cursor: default;
       transform: none;
-      filter: grayscale(80%) brightness(40%);
-      z-index: 0;
+    }
+    .card-btn.is-blocked {
+      cursor: not-allowed;
+      filter: grayscale(35%) brightness(78%);
     }
     .controls { margin-top: 5px; }
     button.action-btn {
@@ -1403,7 +1405,10 @@
             playable = false;
           }
 
-          if (!playable) btn.disabled = true;
+          if (!playable) {
+            btn.disabled = true;
+            if (isYourTurn) btn.classList.add('is-blocked');
+          }
           
           btn.onclick = function() {
             renderPlayerHand(false);
