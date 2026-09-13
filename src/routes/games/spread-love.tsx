@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { type FormEvent, useState } from "react";
-import { FlyoverTable, JoinOrCreate } from "@/components/flyover-lobby";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { Button } from "@/components/ui/button";
@@ -34,10 +33,6 @@ function SpreadLoveEarlyAccess() {
       return false;
     }
   });
-  const [mode, setMode] = useState<"pick" | "solo" | "friends" | "table">("pick");
-  const [room, setRoom] = useState("");
-  const [playerName, setPlayerName] = useState("");
-  const [isHost, setIsHost] = useState(false);
 
   function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -45,7 +40,6 @@ function SpreadLoveEarlyAccess() {
       sessionStorage.setItem(SPREAD_LOVE_UNLOCK_KEY, "1");
       setError("");
       setUnlocked(true);
-      setMode("pick");
       return;
     }
     setError("That passcode is not right. Try again.");
@@ -64,7 +58,7 @@ function SpreadLoveEarlyAccess() {
     <div className="min-h-dvh bg-navy text-paper">
       <div className="scallop scallop-top" aria-hidden="true" />
       <SiteHeader />
-      <main className="mx-auto max-w-xl px-5 py-14 md:max-w-3xl md:px-8">
+      <main className="mx-auto max-w-xl px-5 py-14 md:px-8">
         {!unlocked ? (
           <section className="rounded-lg border border-navy/10 bg-paper p-6 text-ink shadow-[0_18px_50px_rgba(0,0,0,0.24)] md:p-8">
             <p className="text-sm font-semibold tracking-wide text-brand">
@@ -103,14 +97,14 @@ function SpreadLoveEarlyAccess() {
               </Button>
             </form>
           </section>
-        ) : mode === "pick" ? (
+        ) : (
           <section className="rounded-lg border border-navy/10 bg-paper p-6 text-ink shadow-[0_18px_50px_rgba(0,0,0,0.24)] md:p-8">
             <p className="text-sm font-semibold tracking-wide text-brand">
               Fly Over
             </p>
             <h1 className="mt-2 font-display text-3xl font-semibold">How do you want to play?</h1>
             <p className="mt-3 leading-relaxed text-muted">
-              Solo is you plus three AI. A private room lets friends sit in; empty seats stay AI.
+              Play solo against three AI partners for now. Private tables with friends are next.
             </p>
             <div className="mt-6 grid gap-3">
               <Button type="button" className="w-full" onClick={playSolo}>
@@ -119,45 +113,12 @@ function SpreadLoveEarlyAccess() {
               <Button
                 type="button"
                 variant="outline"
-                className="w-full"
-                onClick={() => setMode("friends")}
+                className="w-full opacity-45"
+                disabled
               >
-                Play with friends
+                Play with friends — Coming soon
               </Button>
             </div>
-          </section>
-        ) : mode === "friends" ? (
-          <section className="rounded-lg border border-navy/10 bg-paper p-6 text-ink shadow-[0_18px_50px_rgba(0,0,0,0.24)] md:p-8">
-            <JoinOrCreate
-              onHost={(nextRoom, name) => {
-                setRoom(nextRoom);
-                setPlayerName(name);
-                setIsHost(true);
-                setMode("table");
-              }}
-              onJoin={(nextRoom, name) => {
-                setRoom(nextRoom);
-                setPlayerName(name);
-                setIsHost(false);
-                setMode("table");
-              }}
-            />
-            <button
-              type="button"
-              className="mt-6 text-sm font-semibold text-navy underline"
-              onClick={() => setMode("pick")}
-            >
-              Back
-            </button>
-          </section>
-        ) : (
-          <section className="rounded-lg border border-navy/10 bg-paper p-6 text-ink shadow-[0_18px_50px_rgba(0,0,0,0.24)] md:p-8">
-            <FlyoverTable
-              key={room}
-              room={room}
-              displayName={playerName}
-              isHost={isHost}
-            />
           </section>
         )}
       </main>
