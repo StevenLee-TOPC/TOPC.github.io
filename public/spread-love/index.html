@@ -534,7 +534,8 @@
           masterDeck.push({
             name: suit + ' ' + num,
             suit: suit,
-            value: cardValue, 
+            value: cardValue,
+            face: i,
             path: 'Concept/' + suit + '/' + filePrefix + '_' + num + '.png', 
             isTrump: (suit === 'Doves')
           });
@@ -542,8 +543,8 @@
       }
     }
     
-    masterDeck.push({ name: 'Rod', suit: 'Wild', value: 15, path: 'Concept/Wild/wild_01.png', isTrump: true });
-    masterDeck.push({ name: 'Staff', suit: 'Wild', value: 14, path: 'Concept/Wild/wild_02.png', isTrump: true });
+    masterDeck.push({ name: 'Rod', suit: 'Wild', value: 15, face: 15, path: 'Concept/Wild/wild_01.png', isTrump: true });
+    masterDeck.push({ name: 'Staff', suit: 'Wild', value: 14, face: 14, path: 'Concept/Wild/wild_02.png', isTrump: true });
 
     // --- 2. GAME STATE VARIABLES ---
     var players = [[], [], [], []]; 
@@ -565,6 +566,125 @@
     var targetWinningScore = 250; 
     var discardPile = []; 
 
+    var mp = (function () {
+      try { return JSON.parse(sessionStorage.getItem('flyover-mp') || 'null'); }
+      catch (e) { return null; }
+    })();
+    var mpRole = mp && mp.role ? mp.role : 'solo';
+    var localSeat = mp && typeof mp.seat === 'number' ? mp.seat : 0;
+    var humanSeats = mp && mp.humans ? mp.humans : [true, false, false, false];
+    var seatNames = mp && mp.names ? mp.names : ['You', 'AI 1', 'AI 2', 'AI 3'];
+
+    function vis(logical) {
+      return (logical - localSeat + 4) % 4;
+    }
+
+    function isHumanSeat(idx) {
+      return Boolean(humanSeats[idx]);
+    }
+
+    function publishState() {
+      if (mpRole !== 'host') return;
+      var snap = {
+        players: players,
+        currentBids: currentBids,
+        currentTricks: currentTricks,
+        team1Score: team1Score,
+        team2Score: team2Score,
+        team1Bags: team1Bags,
+        team2Bags: team2Bags,
+        leadSuit: leadSuit,
+        spadesBroken: spadesBroken,
+        turnIndex: turnIndex,
+        cardsOnTable: cardsOnTable,
+        currentDealer: currentDealer,
+        biddingPlayerIndex: biddingPlayerIndex,
+        targetWinningScore: targetWinningScore,
+        discardPile: discardPile,
+        seatNames: seatNames
+      };
+      try {
+        window.parent.postMessage({ source: 'flyover', kind: 'state', snap: snap }, '*');
+      } catch (e) {}
+    }
+
+    function sendAction(action, extra) {
+      try {
+        window.parent.postMessage(Object.assign({
+          source: 'flyover',
+          kind: 'action',
+          action: action,
+          seat: localSeat
+        }, extra || {}), '*');
+      } catch (e) {}
+    }
+
+    function applySnap(snap) {
+      if (!snap) return;
+      players = snap.players;
+      currentBids = snap.currentBids;
+      currentTricks = snap.currentTricks;
+      team1Score = snap.team1Score;
+      team2Score = snap.team2Score;
+      team1Bags = snap.team1Bags;
+      team2Bags = snap.team2Bags;
+      leadSuit = snap.leadSuit;
+      spadesBroken = snap.spadesBroken;
+      turnIndex = snap.turnIndex;
+      cardsOnTable = snap.cardsOnTable;
+      currentDealer = snap.currentDealer;
+      biddingPlayerIndex = snap.biddingPlayerIndex;
+      targetWinningScore = snap.targetWinningScore;
+      discardPile = snap.discardPile || [];
+      if (snap.seatNames) seatNames = snap.seatNames;
+      document.getElementById('menu-screen').style.display = 'none';
+      document.getElementById('play-field').classList.add('is-playing');
+      document.getElementById('play-field').style.display = '';
+      updateSeatLabels();
+      updateTableUI();
+      updateScoreboardUI();
+      highlightActiveAvatar(vis(turnIndex));
+      var bidding = currentBids.some(function (b) { return b === -1; });
+      if (bidding && biddingPlayerIndex === localSeat) {
+        displayHumanBidPanel();
+        renderPlayerHand(false);
+      } else {
+        document.getElementById('bid-ui').style.display = 'none';
+        renderPlayerHand(turnIndex === localSeat && !bidding);
+      }
+    }
+
+    window.addEventListener('message', function (event) {
+      var d = event.data;
+      if (!d || d.source !== 'flyover-parent') return;
+      if (d.kind === 'state' && mpRole === 'guest') applySnap(d.snap);
+      if (d.kind === 'action' && mpRole === 'host') {
+        if (d.action === 'bid' && typeof d.value === 'number') {
+          currentBids[d.seat] = d.value;
+          updateScoreboardUI();
+          biddingPlayerIndex = (d.seat + 1) % 4;
+          runBiddingRotationLoop();
+          publishState();
+        }
+        if (d.action === 'play' && d.name) {
+          var card = players[d.seat].filter(function (c) { return c.name === d.name; })[0];
+          if (card && turnIndex === d.seat) playCard(d.seat, card);
+        }
+      }
+    });
+
+    function updateSeatLabels() {
+      for (var logical = 0; logical < 4; logical++) {
+        var v = vis(logical);
+        var el = document.getElementById('avatar-p' + v);
+        if (!el) continue;
+        var label = el.querySelector('div:last-child');
+        if (!label) continue;
+        if (v === 0) label.textContent = 'You';
+        else label.textContent = seatNames[logical] || (isHumanSeat(logical) ? 'Player' : 'AI');
+      }
+    }
+
     // --- 3. CORE GAME CONTROL LOGIC ---
     function startGame() {
       var selectedRadio = document.querySelector('input[name="scoreLimit"]:checked');
@@ -579,7 +699,9 @@
       team1Bags = 0;
       team2Bags = 0;
       currentDealer = 3; 
+      updateSeatLabels();
       startNewRound();
+      publishState();
     }
 
     function startNewRound() {
@@ -608,15 +730,7 @@
         }
       }
 
-      var suitOrder = { 'Wild': 0, 'Doves': 1, 'Crosses': 2, 'Bread': 3, 'Fish': 4 };
-      players[0].sort(function(a, b) {
-        var orderA = suitOrder[a.suit] !== undefined ? suitOrder[a.suit] : 99;
-        var orderB = suitOrder[b.suit] !== undefined ? suitOrder[b.suit] : 99;
-        if (orderA !== orderB) {
-          return orderA - orderB;
-        }
-        return b.value - a.value; 
-      });
+      sortHand(players[0]);
 
       spadesBroken = false;
       currentTricks = [0, 0, 0, 0];
@@ -629,8 +743,9 @@
       renderPlayerHand(false); 
 
       biddingPlayerIndex = (currentDealer + 1) % 4;
-      highlightActiveAvatar(biddingPlayerIndex); 
+      highlightActiveAvatar(vis(biddingPlayerIndex)); 
       runBiddingRotationLoop();
+      publishState();
     }
 
     function runBiddingRotationLoop() {
@@ -641,15 +756,24 @@
 
       if (bidsCompleted) {
         turnIndex = (currentDealer + 1) % 4;
-        highlightActiveAvatar(turnIndex); 
+        highlightActiveAvatar(vis(turnIndex)); 
         clearTable();
         processTurn();
+        publishState();
         return;
       }
 
-      highlightActiveAvatar(biddingPlayerIndex);
+      highlightActiveAvatar(vis(biddingPlayerIndex));
 
-      if (biddingPlayerIndex === 0) {
+      if (mpRole === 'guest') return;
+
+      if (isHumanSeat(biddingPlayerIndex) && biddingPlayerIndex !== localSeat) {
+        updateStatus("Waiting for " + (seatNames[biddingPlayerIndex] || "player") + " to bid.");
+        publishState();
+        return;
+      }
+
+      if (biddingPlayerIndex === localSeat) {
         updateStatus("Look at your hand and choose your bid.");
         displayHumanBidPanel();
       } else {
@@ -684,11 +808,27 @@
 
     function submitUserBid(userBid) {
       document.getElementById('bid-ui').style.display = 'none';
-      currentBids[0] = userBid;
+      if (mpRole === 'guest') {
+        sendAction('bid', { value: userBid });
+        return;
+      }
+      currentBids[localSeat] = userBid;
       updateScoreboardUI();
 
       biddingPlayerIndex = (biddingPlayerIndex + 1) % 4;
       runBiddingRotationLoop();
+      publishState();
+    }
+
+    function sortHand(hand) {
+      var suitOrder = { Wild: 0, Doves: 1, Crosses: 2, Bread: 3, Fish: 4 };
+      hand.sort(function (a, b) {
+        var orderA = suitOrder[a.suit] !== undefined ? suitOrder[a.suit] : 99;
+        var orderB = suitOrder[b.suit] !== undefined ? suitOrder[b.suit] : 99;
+        if (orderA !== orderB) return orderA - orderB;
+        return b.value - a.value;
+      });
+      return hand;
     }
 
     function isTrumpLead() {
@@ -860,10 +1000,21 @@
         return;
       }
 
-      highlightActiveAvatar(turnIndex);
-      updateStatus("Waiting for Player " + (turnIndex === 0 ? "You" : turnIndex) + "...");
+      highlightActiveAvatar(vis(turnIndex));
+      updateStatus("Waiting for " + (turnIndex === localSeat ? "You" : (seatNames[turnIndex] || "Player")) + "...");
 
-      if (turnIndex === 0) {
+      if (mpRole === 'guest') {
+        renderPlayerHand(turnIndex === localSeat);
+        return;
+      }
+
+      if (isHumanSeat(turnIndex) && turnIndex !== localSeat) {
+        renderPlayerHand(false);
+        publishState();
+        return;
+      }
+
+      if (turnIndex === localSeat) {
         renderPlayerHand(true);
       } else {
         setTimeout(function() {
@@ -903,6 +1054,7 @@
       renderOpponentBacks();
 
       turnIndex = (turnIndex + 1) % 4;
+      publishState();
       processTurn();
     }
 
@@ -1016,7 +1168,7 @@
 
       var winner = winningPlay.playerId;
       currentTricks[winner]++;
-      updateStatus("Player " + (winner === 0 ? "You" : winner) + " won the trick!");
+      updateStatus((winner === localSeat ? "You" : (seatNames[winner] || "Player")) + " won the trick!");
 
       // PUSH REVIEWS TO LOG DISPLAY PANEL BEFORE FLUSHING CARDS
       document.getElementById('test-history-bar').style.display = 'flex';
@@ -1038,12 +1190,13 @@
 
       updateScoreboardUI();
       renderOpponentBacks();
+      publishState();
 
       cardsOnTable = [];
       leadSuit = null;
       turnIndex = winner; 
 
-      if (players[0].length === 0) {
+      if ((players[localSeat] || []).length === 0) {
         setTimeout(evaluateRoundScores, 1500);
       } else {
         setTimeout(processTurn, 1000);
@@ -1214,7 +1367,7 @@
         var play = cardsOnTable[i];
         var cardDiv = document.createElement('div');
         cardDiv.className = 'played-card';
-        cardDiv.id = 'card-p' + play.playerId;
+        cardDiv.id = 'card-p' + vis(play.playerId);
         cardDiv.innerHTML = '<img src="' + play.card.path + '" alt="' + play.card.name + '">';
         document.getElementById('table-area').appendChild(cardDiv);
       }
@@ -1224,10 +1377,12 @@
     function renderPlayerHand(isYourTurn) {
       var handDiv = document.getElementById('player-hand');
       handDiv.innerHTML = '';
+      sortHand(players[localSeat] || []);
 
-      for (var i = 0; i < players[0].length; i++) {
+      var myHand = players[localSeat] || [];
+      for (var i = 0; i < myHand.length; i++) {
         (function(index) {
-          var card = players[0][index];
+          var card = myHand[index];
           var btn = document.createElement('button');
           btn.className = 'card-btn';
           
@@ -1236,7 +1391,7 @@
 
           var playable = true;
           if (isYourTurn) {
-            var legal = getLegalCards(players[0]);
+            var legal = getLegalCards(myHand);
             playable = legal.some(function (c) { return c === card; });
             if (playable && isTitusCard(card) && trickContainsActsInLeadSuit()) {
               var hasAnotherLegalChoice = legal.some(function (otherCard) {
@@ -1251,12 +1406,27 @@
           if (!playable) btn.disabled = true;
           
           btn.onclick = function() {
-            renderPlayerHand(false); 
-            playCard(0, card);
+            renderPlayerHand(false);
+            if (mpRole === 'guest') {
+              sendAction('play', { name: card.name });
+              return;
+            }
+            playCard(localSeat, card);
           };
           handDiv.appendChild(btn);
         })(i);
       }
+    }
+
+    if (mpRole === 'guest') {
+      document.getElementById('menu-screen').style.display = 'none';
+      document.getElementById('play-field').classList.add('is-playing');
+      document.getElementById('play-field').style.display = '';
+      updateStatus('Waiting for the host to start…');
+      updateSeatLabels();
+      try { window.parent.postMessage({ source: 'flyover', kind: 'need-state' }, '*'); } catch (e) {}
+    } else {
+      updateSeatLabels();
     }
   </script>
 </body>
