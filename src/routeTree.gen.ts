@@ -10,11 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiRtcRouteImport } from './routes/api/rtc'
 import { Route as GamesSpreadLoveRouteImport } from './routes/games/spread-love'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiRtcRoute = ApiRtcRouteImport.update({
+  id: '/api/rtc',
+  path: '/api/rtc',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GamesSpreadLoveRoute = GamesSpreadLoveRouteImport.update({
@@ -25,27 +31,31 @@ const GamesSpreadLoveRoute = GamesSpreadLoveRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/api/rtc': typeof ApiRtcRoute
   '/games/spread-love': typeof GamesSpreadLoveRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/api/rtc': typeof ApiRtcRoute
   '/games/spread-love': typeof GamesSpreadLoveRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/api/rtc': typeof ApiRtcRoute
   '/games/spread-love': typeof GamesSpreadLoveRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/games/spread-love'
+  fullPaths: '/' | '/api/rtc' | '/games/spread-love'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/games/spread-love'
-  id: '__root__' | '/' | '/games/spread-love'
+  to: '/' | '/api/rtc' | '/games/spread-love'
+  id: '__root__' | '/' | '/api/rtc' | '/games/spread-love'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApiRtcRoute: typeof ApiRtcRoute
   GamesSpreadLoveRoute: typeof GamesSpreadLoveRoute
 }
 
@@ -56,6 +66,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/rtc': {
+      id: '/api/rtc'
+      path: '/api/rtc'
+      fullPath: '/api/rtc'
+      preLoaderRoute: typeof ApiRtcRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/games/spread-love': {
@@ -70,6 +87,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApiRtcRoute: ApiRtcRoute,
   GamesSpreadLoveRoute: GamesSpreadLoveRoute,
 }
 export const routeTree = rootRouteImport
