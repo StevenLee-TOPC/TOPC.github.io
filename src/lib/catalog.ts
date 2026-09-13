@@ -54,11 +54,11 @@ export const products: Product[] = [
 export const onlineGames = [
   { name: "Bible Bid", cta: "Coming Soon" },
   {
-    name: "Spread Love",
+    name: "Fly Over",
     cta: "Early Access",
     href: "/games/spread-love",
   },
-  { name: "Fly Over", cta: "Coming Soon" },
+  { name: "Spread Love", cta: "Coming Soon" },
   { name: "Declaration", cta: "Coming Soon" },
 ] as const;
 

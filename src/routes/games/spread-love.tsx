@@ -15,7 +15,7 @@ const GAME_HREF = "/spread-love/index.html";
 export const Route = createFileRoute("/games/spread-love")({
   component: SpreadLoveEarlyAccess,
   head: () => ({
-    meta: [{ title: "Spread Love Early Access | TOP-C" }],
+    meta: [{ title: "Fly Over Early Access | TOP-C" }],
   }),
 });
 
@@ -51,7 +51,7 @@ function SpreadLoveEarlyAccess() {
       <main className="mx-auto max-w-xl px-5 py-14 md:px-8">
         {opening ? (
           <div className="rounded-lg border border-navy/10 bg-paper p-6 text-ink">
-            <p className="font-display text-xl font-semibold">Opening Spread Love…</p>
+            <p className="font-display text-xl font-semibold">Opening Fly Over…</p>
             <p className="mt-2 text-sm text-muted">
               If the table does not load,{" "}
               <a className="font-semibold text-navy underline" href={GAME_HREF}>
@@ -66,7 +66,7 @@ function SpreadLoveEarlyAccess() {
               Early Access
             </p>
             <h1 className="mt-2 font-display text-3xl font-semibold md:text-4xl">
-              Spread Love
+              Fly Over
             </h1>
             <p className="mt-4 leading-relaxed text-muted">
               Use your passcode to open this table.

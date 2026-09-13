@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Spread Love | TOP-C</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+  <title>Fly Over | TOP-C</title>
   <script>
     (function () {
       try {
@@ -67,6 +67,7 @@
 
     /* Core Layout Styles */
     .game-play-area { display: none; }
+    .game-play-area.is-playing { display: block; }
 
     /* Clean Scoreboard Grid */
     .scoreboard {
@@ -178,13 +179,7 @@
 
     /* Face-down opponent card backs */
     .opponent-back-row {
-      position: absolute;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 3px;
-      z-index: 3;
-      pointer-events: none;
+      display: none;
     }
     .opponent-back-card {
       width: 38px;
@@ -314,16 +309,144 @@
       cursor: pointer;
     }
     .bid-btn:hover { background: #ff6d00; }
+
+    .brand-bar {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .south-rail { min-width: 0; }
+
+    html, body {
+      min-height: 100%;
+    }
+
+    /* Preview + phone: fit the table on one screen (sandbox is portrait). */
+    @media (max-width: 900px) {
+      html, body {
+        height: 100dvh;
+        overflow: hidden;
+      }
+      body {
+        padding: 4px 8px;
+      }
+      h1 { font-size: 16px; margin: 0; }
+      .topc-back { margin: 0; font-size: 12px; }
+      .brand-bar { margin-bottom: 2px; }
+      .game-container {
+        max-width: none;
+        height: 100dvh;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+      }
+      .menu-screen {
+        margin: 12px auto;
+        padding: 16px;
+        overflow: auto;
+      }
+      .game-play-area.is-playing {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-height: 0;
+        gap: 6px;
+      }
+      .scoreboard {
+        margin: 0;
+        padding: 8px;
+        gap: 6px;
+        flex: 0 0 auto;
+      }
+      .score-num { font-size: 22px; }
+      .team-title { font-size: 10px; margin-bottom: 0; }
+      .stat-line { font-size: 11px; }
+      .game-meta { font-size: 10px; padding-top: 4px; margin-top: 2px; }
+      .test-log-bar { display: none !important; }
+      .table-area {
+        flex: 1 1 auto;
+        height: auto;
+        min-height: 160px;
+        margin: 0;
+        border-width: 2px;
+      }
+      .player-avatar {
+        width: 44px;
+        height: 44px;
+        font-size: 9px;
+      }
+      .avatar-icon { font-size: 14px; }
+      #avatar-p0 { left: calc(50% - 22px); bottom: -6px; }
+      #avatar-p1 { top: calc(50% - 22px); left: -6px; }
+      #avatar-p2 { left: calc(50% - 22px); top: -6px; }
+      #avatar-p3 { top: calc(50% - 22px); right: -6px; }
+      .opponent-back-card { width: 22px; height: 33px; margin-left: -12px; }
+      #backs-p1 { left: 48px; top: calc(50% - 70px); }
+      #backs-p2 { top: 36px; }
+      #backs-p3 { right: 48px; top: calc(50% - 70px); }
+      .played-card { width: 52px; height: 78px; }
+      #card-p0 { bottom: 44px; }
+      #card-p1 { left: 44px; }
+      #card-p2 { top: 44px; }
+      #card-p3 { right: 44px; }
+      .south-rail { flex: 0 0 auto; }
+      .hand-container {
+        min-height: 0;
+        padding: 2px 8px 4px;
+      }
+      .hand-container h3 { display: none; }
+      .hand-cards { padding-left: 16px; }
+      .card-btn {
+        width: 48px;
+        height: 72px;
+        margin-left: -16px;
+      }
+      .card-btn:hover { transform: translateY(-10px); }
+      .bid-container { padding: 4px; margin: 0 0 4px; }
+      .bid-btn { padding: 8px 10px; margin: 2px; font-size: 13px; min-width: 36px; }
+      #status-message {
+        font-size: 13px !important;
+        max-width: 220px !important;
+        padding: 4px 8px !important;
+      }
+    }
+
+    @media (orientation: landscape) and (max-height: 540px) {
+      .game-play-area.is-playing {
+        display: grid;
+        grid-template-columns: minmax(160px, 220px) minmax(0, 1fr);
+        grid-template-rows: minmax(0, 1fr) auto;
+        gap: 6px 10px;
+      }
+      .scoreboard {
+        grid-column: 1;
+        grid-row: 1;
+        overflow: auto;
+      }
+      .table-area {
+        grid-column: 2;
+        grid-row: 1;
+      }
+      .south-rail {
+        grid-column: 1 / -1;
+        grid-row: 2;
+      }
+    }
   </style>
 </head>
 <body>
 
   <div class="game-container">
-    <h1>Spread Love</h1>
-    <a class="topc-back" href="/#games" onclick="try{sessionStorage.removeItem('topc-spread-love-unlocked')}catch(e){}">← Back to TOP-C</a>
+    <div class="brand-bar">
+      <h1>Fly Over</h1>
+      <a class="topc-back" href="/#games" onclick="try{sessionStorage.removeItem('topc-spread-love-unlocked')}catch(e){}">← Back to TOP-C</a>
+    </div>
 
     <div id="menu-screen" class="menu-screen">
       <h2>Game Setup</h2>
+      <p>Partnership Spades with TOP-C ranking: follow suit, trump (Doves, Rod, Staff) until broken, Nil, and bags. AI partners bid and play to make the contract.</p>
       <p>Select the targeted winning score condition for this match:</p>
       <div class="setup-options">
         <label class="radio-label">
@@ -342,12 +465,12 @@
         <div class="score-box team1">
           <div class="team-title">Your Team (You & AI 2)</div>
           <div id="score-val-t1" class="score-num">0</div>
-          <div id="stats-t1" class="stat-line">Bids: ? | Tricks: 0</div>
+          <div id="stats-t1" class="stat-line">Bids: ? | Tricks: 0 | Bags: 0</div>
         </div>
         <div class="score-box team2">
           <div class="team-title">Opponents (AI 1 & AI 3)</div>
           <div id="score-val-t2" class="score-num">0</div>
-          <div id="stats-t2" class="stat-line">Bids: ? | Tricks: 0</div>
+          <div id="stats-t2" class="stat-line">Bids: ? | Tricks: 0 | Bags: 0</div>
         </div>
         <div id="meta-game-info" class="game-meta">
           Dealer Button: Player ? | Winning Limit Goal: 250 Points
@@ -374,6 +497,7 @@
         <div id="backs-p3" class="opponent-back-row"></div>
       </div>
 
+      <div class="south-rail">
       <div id="bid-ui" class="bid-container">
         <p style="margin: 0 0 8px 0; font-size: 16px; font-weight: bold; color: #ffeb3b;">Select Your Bid:</p>
         <div id="bid-buttons"></div>
@@ -383,8 +507,9 @@
         <h3>Your Hand</h3>
         <div id="player-hand" class="hand-cards"></div>
       </div>
+      </div>
     </div>
-  </div>
+    </div>
 
   <script>
     // --- 1. DECK ASSIGNMENT MECHANICS ---
@@ -424,7 +549,9 @@
     // --- 2. GAME STATE VARIABLES ---
     var players = [[], [], [], []]; 
     var team1Score = 0; 
-    var team2Score = 0; 
+    var team2Score = 0;
+    var team1Bags = 0;
+    var team2Bags = 0; 
     var currentBids = [0, 0, 0, 0];
     var currentTricks = [0, 0, 0, 0];
     
@@ -445,10 +572,13 @@
       targetWinningScore = parseInt(selectedRadio.value);
 
       document.getElementById('menu-screen').style.display = 'none';
-      document.getElementById('play-field').style.display = 'block';
+      document.getElementById('play-field').classList.add('is-playing');
+      document.getElementById('play-field').style.display = '';
 
       team1Score = 0;
       team2Score = 0;
+      team1Bags = 0;
+      team2Bags = 0;
       currentDealer = 3; 
       startNewRound();
     }
@@ -526,12 +656,10 @@
       } else {
         updateStatus("Player " + biddingPlayerIndex + " is thinking of a bid...");
         setTimeout(function() {
-          var highCards = 0;
-          for (var c = 0; c < players[biddingPlayerIndex].length; c++) {
-            if (players[biddingPlayerIndex][c].value >= 10 || players[biddingPlayerIndex][c].isTrump) highCards++;
-          }
-          currentBids[biddingPlayerIndex] = Math.max(1, Math.floor(highCards / 2.5));
-          
+          currentBids[biddingPlayerIndex] = estimateBid(
+            players[biddingPlayerIndex],
+            currentBids[(biddingPlayerIndex + 2) % 4]
+          );
           updateScoreboardUI();
           biddingPlayerIndex = (biddingPlayerIndex + 1) % 4;
           runBiddingRotationLoop();
@@ -549,7 +677,7 @@
       for (var b = 0; b <= 13; b++) {
         var btn = document.createElement('button');
         btn.className = 'bid-btn';
-        btn.textContent = b;
+        btn.textContent = b === 0 ? "Nil" : String(b);
         btn.setAttribute('onclick', 'submitUserBid(' + b + ')');
         btnContainer.appendChild(btn);
       }
@@ -564,27 +692,172 @@
       runBiddingRotationLoop();
     }
 
+    function isTrumpLead() {
+      return leadSuit === "Wild" || leadSuit === "Doves";
+    }
+
+    function cardBeats(challenger, currentWinner) {
+      if (!currentWinner) return true;
+      if (challenger.isTrump && !currentWinner.isTrump) return true;
+      if (challenger.isTrump && currentWinner.isTrump) {
+        return challenger.value > currentWinner.value;
+      }
+      if (!challenger.isTrump && currentWinner.isTrump) return false;
+      if (challenger.suit === leadSuit && currentWinner.suit === leadSuit) {
+        return challenger.value > currentWinner.value;
+      }
+      return false;
+    }
+
+    function getLegalCards(hand) {
+      if (!hand || hand.length === 0) return [];
+      var legal;
+      if (cardsOnTable.length === 0) {
+        if (!spadesBroken) {
+          var nonTrump = hand.filter(function (c) { return !c.isTrump; });
+          legal = nonTrump.length > 0 ? nonTrump : hand.slice();
+        } else {
+          legal = hand.slice();
+        }
+      } else if (isTrumpLead()) {
+        var trumpCards = hand.filter(function (c) { return c.isTrump; });
+        legal = trumpCards.length > 0 ? trumpCards : hand.slice();
+      } else {
+        var inSuit = hand.filter(function (c) { return c.suit === leadSuit; });
+        legal = inSuit.length > 0 ? inSuit : hand.slice();
+      }
+      return applyTitusProtection(legal);
+    }
+
+    function applyTitusProtection(cardList) {
+      if (!trickContainsActsInLeadSuit()) return cardList;
+      var nonTitus = cardList.filter(function (c) { return !isTitusCard(c); });
+      return nonTitus.length > 0 ? nonTitus : cardList;
+    }
+
     function getCurrentWinningPlay() {
       if (cardsOnTable.length === 0) return null;
       var winningPlay = cardsOnTable[0];
       for (var i = 1; i < cardsOnTable.length; i++) {
-        var challenger = cardsOnTable[i];
-        if (challenger.card.isTrump && !winningPlay.card.isTrump) {
-          winningPlay = challenger;
-        } else if (challenger.card.isTrump && winningPlay.card.isTrump) {
-          if (challenger.card.value > winningPlay.card.value) winningPlay = challenger;
-        } else if ((leadSuit === 'Wild' || leadSuit === 'Doves') && winningPlay.card.isTrump) {
-          if (challenger.card.isTrump && challenger.card.value > winningPlay.card.value) winningPlay = challenger;
-        } else if (challenger.card.suit === leadSuit && winningPlay.card.suit === leadSuit) {
-          if (challenger.card.value > winningPlay.card.value) winningPlay = challenger;
+        if (cardBeats(cardsOnTable[i].card, winningPlay.card)) {
+          winningPlay = cardsOnTable[i];
         }
       }
       return winningPlay;
     }
 
+    function lowestCard(list) {
+      return list.slice().sort(function (a, b) { return a.value - b.value; })[0];
+    }
+
+    function highestCard(list) {
+      return list.slice().sort(function (a, b) { return b.value - a.value; })[0];
+    }
+
+    function estimateBid(hand, partnerBid) {
+      var tricks = 0;
+      var trump = [];
+      var i;
+      for (i = 0; i < hand.length; i++) {
+        if (hand[i].isTrump) trump.push(hand[i]);
+      }
+      for (i = 0; i < trump.length; i++) {
+        if (trump[i].value >= 13.5) tricks += 1;
+        else if (trump[i].value >= 11) tricks += 0.65;
+        else tricks += 0.3;
+      }
+      if (trump.length >= 5) tricks += (trump.length - 4) * 0.45;
+      for (i = 0; i < hand.length; i++) {
+        var c = hand[i];
+        if (c.isTrump) continue;
+        if (c.value >= 13.5) tricks += 0.85;
+        else if (c.value >= 13) tricks += 0.45;
+        else if (c.value >= 12) tricks += 0.2;
+      }
+      var bid = Math.round(tricks);
+      if (trump.length === 0 && tricks < 0.8) bid = 0;
+      else bid = Math.max(1, bid);
+      bid = Math.min(8, bid);
+      if (partnerBid >= 0 && partnerBid !== 0) {
+        var team = partnerBid + bid;
+        if (team > 8) bid = Math.max(1, 8 - partnerBid);
+      }
+      return bid;
+    }
+
+    function teamOf(playerIdx) {
+      return playerIdx % 2;
+    }
+
+    function teamBidTotal(playerIdx) {
+      var a = playerIdx % 2;
+      var b0 = currentBids[a];
+      var b1 = currentBids[a + 2];
+      if (b0 < 0 || b1 < 0) return 0;
+      var sum = 0;
+      if (b0 > 0) sum += b0;
+      if (b1 > 0) sum += b1;
+      return sum;
+    }
+
+    function teamTrickTotal(playerIdx) {
+      var a = playerIdx % 2;
+      return currentTricks[a] + currentTricks[a + 2];
+    }
+
+    function needsMoreTricks(playerIdx) {
+      return teamTrickTotal(playerIdx) < teamBidTotal(playerIdx);
+    }
+
+    function alreadyMade(playerIdx) {
+      return teamTrickTotal(playerIdx) >= teamBidTotal(playerIdx) && teamBidTotal(playerIdx) > 0;
+    }
+
+    function opponentsYetToPlay(fromIdx) {
+      var left = [];
+      var n = (fromIdx + 1) % 4;
+      while (n !== (cardsOnTable.length === 0 ? fromIdx : ((cardsOnTable[0].playerId))) && left.length < 3) {
+        var already = false;
+        for (var i = 0; i < cardsOnTable.length; i++) {
+          if (cardsOnTable[i].playerId === n) already = true;
+        }
+        if (!already && n !== fromIdx) left.push(n);
+        n = (n + 1) % 4;
+        if (n === fromIdx) break;
+      }
+      return left;
+    }
+
+    function isBossCard(card) {
+      if (card.suit === "Wild") {
+        if (card.value === 15) return true;
+        if (card.value === 14) {
+          return discardPile.some(function (c) { return c.name === "Rod"; });
+        }
+        return false;
+      }
+      var higher = masterDeck.filter(function (mc) {
+        return mc.suit === card.suit && mc.value > card.value;
+      });
+      return higher.every(function (hc) {
+        return discardPile.some(function (c) { return c.name === hc.name; });
+      });
+    }
+
     function processTurn() {
       if (cardsOnTable.length === 4) {
         setTimeout(evaluateTrick, 1500);
+        return;
+      }
+
+      if (!players[turnIndex] || players[turnIndex].length === 0) {
+        var stillHaveCards = players.some(function (h) { return h.length > 0; });
+        if (!stillHaveCards) {
+          setTimeout(evaluateRoundScores, 400);
+          return;
+        }
+        turnIndex = (turnIndex + 1) % 4;
+        setTimeout(processTurn, 0);
         return;
       }
 
@@ -595,13 +868,27 @@
         renderPlayerHand(true);
       } else {
         setTimeout(function() {
-          var aiCard = selectAICard(turnIndex);
-          playCard(turnIndex, aiCard);
+          var legal = getLegalCards(players[turnIndex]);
+          var aiCard = selectAICard(turnIndex) || legal[0];
+          if (aiCard) playCard(turnIndex, aiCard);
         }, 800);
       }
     }
 
     function playCard(playerIdx, card) {
+      if (!card) return;
+      if (cardsOnTable.length >= 4) return;
+      if (playerIdx !== turnIndex) return;
+      var legal = getLegalCards(players[playerIdx]);
+      var allowed = false;
+      for (var i = 0; i < legal.length; i++) {
+        if (legal[i] === card) allowed = true;
+      }
+      if (!allowed) {
+        if (legal.length === 0) return;
+        card = legal[0];
+      }
+
       players[playerIdx] = players[playerIdx].filter(function(c) { return c !== card; });
 
       if (cardsOnTable.length === 0) {
@@ -630,152 +917,103 @@
 
     function trickContainsActsInLeadSuit() {
       return cardsOnTable.some(function(play) {
-        return isActsCard(play.card) && (play.card.suit === leadSuit || play.card.isTrump);
+        return isActsCard(play.card) && (isTrumpLead() ? play.card.isTrump : play.card.suit === leadSuit);
       });
     }
 
     function avoidTitusWhenActsIsAlreadyWinning(cardList) {
-      // TOP-C CHS protection rule:
-      // When Acts (#1) has already been played in the current trick, Titus (#13)
-      // should not be trapped behind it unless Titus is the player's only legal option.
-      if (!trickContainsActsInLeadSuit()) return cardList;
-      var nonTitus = cardList.filter(function(c) { return !isTitusCard(c); });
-      return nonTitus.length > 0 ? nonTitus : cardList;
+      return applyTitusProtection(cardList);
     }
 
     function selectAICard(aiIdx) {
       var hand = players[aiIdx];
+      var legal = getLegalCards(hand);
+      if (!legal.length) return hand[0];
       var partnerIdx = (aiIdx + 2) % 4;
-      var validCards = [];
+      var selfNil = currentBids[aiIdx] === 0;
+      var partnerNil = currentBids[partnerIdx] === 0;
+      var winning = getCurrentWinningPlay();
+      var leading = cardsOnTable.length === 0;
+      var lastToPlay = cardsOnTable.length === 3;
 
-      function checkIfCardIsBoss(cardToCheck) {
-        if (cardToCheck.suit === 'Wild') return cardToCheck.value === 15 || (cardToCheck.value === 14 && discardPile.some(c => c.name === 'Rod'));
-        var higherCardsInGame = masterDeck.filter(function(mc) {
-          return mc.suit === cardToCheck.suit && mc.value > cardToCheck.value;
+      function winsWith(card) {
+        if (leading) return true;
+        return cardBeats(card, winning.card);
+      }
+
+      function duckingCards() {
+        var ducks = legal.filter(function (c) { return !winsWith(c); });
+        return ducks.length ? ducks : legal;
+      }
+
+      function cheapestWinners() {
+        var wins = legal.filter(function (c) { return winsWith(c); });
+        wins.sort(function (a, b) {
+          if (a.isTrump !== b.isTrump) return a.isTrump ? 1 : -1;
+          return a.value - b.value;
         });
-        return higherCardsInGame.every(function(hc) {
-          return discardPile.some(c => c.name === hc.name);
+        return wins;
+      }
+
+      if (selfNil) {
+        if (leading) {
+          var lowOff = legal.filter(function (c) { return !c.isTrump; });
+          return lowestCard(lowOff.length ? lowOff : legal);
+        }
+        return lowestCard(duckingCards());
+      }
+
+      if (partnerNil && winning && winning.playerId === partnerIdx) {
+        var cover = cheapestWinners();
+        if (cover.length) return cover[0];
+        return lowestCard(legal);
+      }
+
+      if (leading) {
+        var bosses = legal.filter(function (c) { return !c.isTrump && isBossCard(c); });
+        if (bosses.length && needsMoreTricks(aiIdx)) return highestCard(bosses);
+        if (alreadyMade(aiIdx)) {
+          var low = legal.filter(function (c) { return !c.isTrump; });
+          return lowestCard(low.length ? low : legal);
+        }
+        var safeHigh = legal.filter(function (c) {
+          return !c.isTrump && c.value >= 12;
         });
+        if (safeHigh.length && needsMoreTricks(aiIdx)) return highestCard(safeHigh);
+        var off = legal.filter(function (c) { return !c.isTrump; });
+        return lowestCard(off.length ? off : legal);
       }
 
-      function getSuitCountPlayed(suitName) {
-        return discardPile.filter(c => c.suit === suitName).length;
+      var partnerWinning = winning && winning.playerId === partnerIdx;
+      var partnerBoss = partnerWinning && isBossCard(winning.card);
+      var need = needsMoreTricks(aiIdx);
+      var made = alreadyMade(aiIdx);
+
+      if (partnerWinning && (lastToPlay || partnerBoss)) {
+        var junk = legal.filter(function (c) { return !c.isTrump && !winsWith(c); });
+        if (junk.length) return highestCard(junk);
+        return lowestCard(duckingCards());
       }
 
-      function opponentBehindIsShort(suitName) {
-        var nextPlayer = (aiIdx + 1) % 4;
-        while (nextPlayer !== turnIndex && cardsOnTable.some(p => p.playerId === nextPlayer) === false) {
-          if (nextPlayer !== partnerIdx && nextPlayer !== aiIdx) {
-            if (discardPile.some(c => c.suit !== suitName && masterDeck.find(md => md.name === c.name).suit === suitName)) {
-              return true;
-            }
-          }
-          nextPlayer = (nextPlayer + 1) % 4;
-        }
-        return false;
+      if (made && !partnerNil) {
+        return lowestCard(duckingCards());
       }
 
-      if (cardsOnTable.length === 0) {
-        var bossLeads = hand.filter(function(c) {
-          return !c.isTrump && checkIfCardIsBoss(c);
-        });
-        if (bossLeads.length > 0) return bossLeads[0]; 
-
-        var highLeads = hand.filter(function(c) {
-          return !c.isTrump && c.value >= 12 && getSuitCountPlayed(c.suit) < 7 && !opponentBehindIsShort(c.suit);
-        });
-        if (highLeads.length > 0) {
-          highLeads.sort(function(a, b) { return b.value - a.value; });
-          return highLeads[0];
-        }
-
-        // TOP-C rule: Doves, Rod, and Staff are trump and may be led anytime.
-        validCards = [...hand];
-        validCards.sort(function(a, b) { return a.value - b.value; });
-        return validCards[0];
+      var winners = cheapestWinners();
+      if (need && winners.length) {
+        if (lastToPlay) return winners[0];
+        if (!partnerWinning) return winners[0];
       }
 
-      if (leadSuit === 'Wild' || leadSuit === 'Doves') {
-        // If trump is led, players must answer with trump if they have it.
-        validCards = hand.filter(function(c) { return c.isTrump; });
-      } else {
-        // TOP-C rule: a player may play trump anytime, even if they still hold the led suit.
-        validCards = hand.filter(function(c) { return c.suit === leadSuit || c.isTrump; });
+      if (!partnerWinning && winners.length && !made) {
+        return winners[0];
       }
 
-      var isShortSuited = (validCards.length === 0);
-      if (isShortSuited) {
-        validCards = [...hand]; 
-      }
-
-      var currentWinningPlay = getCurrentWinningPlay();
-      var winningCard = currentWinningPlay.card;
-
-      if (currentWinningPlay.playerId === partnerIdx) {
-        var opponentLeftToPlay = false;
-        var checkingIdx = (aiIdx + 1) % 4;
-        while (checkingIdx !== turnIndex) {
-          if (checkingIdx !== partnerIdx && !cardsOnTable.some(p => p.playerId === checkingIdx)) {
-            opponentLeftToPlay = true;
-          }
-          checkingIdx = (checkingIdx + 1) % 4;
-        }
-
-        validCards = avoidTitusWhenActsIsAlreadyWinning(validCards);
-
-        if (isShortSuited) {
-          var garbageOptions = validCards.filter(function(c) { return !c.isTrump; });
-          if (garbageOptions.length > 0) {
-            garbageOptions.sort(function(a, b) { return b.value - a.value; });
-            return garbageOptions[0]; 
-          }
-        }
-        validCards.sort(function(a, b) { return a.value - b.value; });
-        return validCards[0];
-      }
-
-      validCards = avoidTitusWhenActsIsAlreadyWinning(validCards);
-      validCards.sort(function(a, b) { return a.value - b.value; });
-
-      var winningOptions = validCards.filter(function(c) {
-        if (c.isTrump && !winningCard.isTrump) return true;
-        if (c.isTrump && winningCard.isTrump && c.value > winningCard.value) return true;
-        if (c.suit === leadSuit && winningCard.suit === leadSuit && c.value > winningCard.value) return true;
-        return false;
-      });
-
-      if (winningOptions.length > 0) {
-        if (isShortSuited) {
-          if (winningCard.isTrump) {
-            winningOptions.sort(function(a, b) { return a.value - b.value; });
-            return winningOptions[0]; 
-          } else {
-            var trumpsOnly = winningOptions.filter(function(c) { return c.isTrump; });
-            if (trumpsOnly.length > 0) {
-              trumpsOnly.sort(function(a, b) { return a.value - b.value; });
-              return trumpsOnly[0];
-            }
-          }
-        }
-        return winningOptions[0]; 
-      }
-
-      return validCards[0];
+      return lowestCard(duckingCards());
     }
 
     function evaluateTrick() {
-      var winningPlay = cardsOnTable[0];
-
-      for (var i = 1; i < 4; i++) {
-        var challenger = cardsOnTable[i];
-        if (challenger.card.isTrump && !winningPlay.card.isTrump) {
-          winningPlay = challenger; 
-        } else if (challenger.card.isTrump && winningPlay.card.isTrump) {
-          if (challenger.card.value > winningPlay.card.value) winningPlay = challenger; 
-        } else if (challenger.card.suit === leadSuit && winningPlay.card.suit === leadSuit) {
-          if (challenger.card.value > winningPlay.card.value) winningPlay = challenger; 
-        }
-      }
+      var winningPlay = getCurrentWinningPlay();
 
       var winner = winningPlay.playerId;
       currentTricks[winner]++;
@@ -813,44 +1051,108 @@
       }
     }
 
-    function evaluateRoundScores() {
-      var t1Bids = currentBids[0] + currentBids[2];
-      var t1Tricks = currentTricks[0] + currentTricks[2];
-      var t1IsSet = false;
-      
-      if (t1Tricks >= t1Bids) {
-        team1Score += (t1Bids * 10) + (t1Tricks - t1Bids); 
+    function scorePartnership(bidA, bidB, tricksA, tricksB) {
+      var nilDelta = 0;
+      var contract = 0;
+      if (bidA === 0) {
+        nilDelta += tricksA === 0 ? 100 : -100;
       } else {
-        team1Score -= (t1Bids * 10); 
-        t1IsSet = true;
+        contract += bidA;
       }
+      if (bidB === 0) {
+        nilDelta += tricksB === 0 ? 100 : -100;
+      } else {
+        contract += bidB;
+      }
+      var tricks = tricksA + tricksB;
+      var bags = 0;
+      var made = 0;
+      var set = false;
+      if (contract === 0) {
+        made = 0;
+      } else if (tricks >= contract) {
+        bags = tricks - contract;
+        made = contract * 10 + bags;
+      } else {
+        made = -(contract * 10);
+        set = true;
+      }
+      return { delta: made + nilDelta, bags: bags, set: set };
+    }
 
-      var t2Bids = currentBids[1] + currentBids[3];
-      var t2Tricks = currentTricks[1] + currentTricks[3];
-      var t2IsSet = false;
-      
-      if (t2Tricks >= t2Bids) {
-        team2Score += (t2Bids * 10) + (t2Tricks - t2Bids);
-      } else {
-        team2Score -= (t2Bids * 10);
-        t2IsSet = true;
+    function applyBags(currentBags, newBags) {
+      var bags = currentBags + newBags;
+      var extra = 0;
+      while (bags >= 10) {
+        bags -= 10;
+        extra -= 100;
       }
+      return { bags: bags, extra: extra };
+    }
+
+    function evaluateRoundScores() {
+      var t1 = scorePartnership(
+        currentBids[0],
+        currentBids[2],
+        currentTricks[0],
+        currentTricks[2],
+      );
+      var t2 = scorePartnership(
+        currentBids[1],
+        currentBids[3],
+        currentTricks[1],
+        currentTricks[3],
+      );
+
+      var t1Bag = applyBags(team1Bags, t1.set ? 0 : t1.bags);
+      var t2Bag = applyBags(team2Bags, t2.set ? 0 : t2.bags);
+      team1Bags = t1Bag.bags;
+      team2Bags = t2Bag.bags;
+      team1Score += t1.delta + t1Bag.extra;
+      team2Score += t2.delta + t2Bag.extra;
 
       var noticeSummary = "";
-      if (t1IsSet) {
-        noticeSummary += "\n🚨 YOUR TEAM GOT SET! (-" + (t1Bids * 10) + " points) 🚨";
+      if (currentBids[0] === 0) {
+        noticeSummary += currentTricks[0] === 0 ? "\nNil made (+100)" : "\nNil failed (-100)";
       }
-      if (t2IsSet) {
-        noticeSummary += "\n🚨 THE OPPONENTS GOT SET! (-" + (t2Bids * 10) + " points) 🚨";
+      if (currentBids[2] === 0) {
+        noticeSummary += currentTricks[2] === 0 ? "\nPartner Nil made (+100)" : "\nPartner Nil failed (-100)";
       }
+      if (t1.set) {
+        noticeSummary += "\nYOUR TEAM GOT SET! (" + t1.delta + " points)";
+      }
+      if (t2.set) {
+        noticeSummary += "\nTHE OPPONENTS GOT SET!";
+      }
+      if (t1Bag.extra < 0) noticeSummary += "\n10 bags — your team -100";
+      if (t2Bag.extra < 0) noticeSummary += "\n10 bags — opponents -100";
 
-      alert("Round Over!\nYour Team tricks: " + t1Tricks + "/" + t1Bids + " | Opponent tricks: " + t2Tricks + "/" + t2Bids + noticeSummary + "\n\nCurrent Scores:\nYour Team: " + team1Score + "\nOpponents: " + team2Score);
+      var t1Bids = currentBids[0] + currentBids[2];
+      var t2Bids = currentBids[1] + currentBids[3];
+      var t1Tricks = currentTricks[0] + currentTricks[2];
+      var t2Tricks = currentTricks[1] + currentTricks[3];
+
+      alert("Round Over!\nYour Team tricks: " + t1Tricks + "/" + t1Bids + " | Opponent tricks: " + t2Tricks + "/" + t2Bids + noticeSummary + "\n\nCurrent Scores:\nYour Team: " + team1Score + " (bags " + team1Bags + ")\nOpponents: " + team2Score + " (bags " + team2Bags + ")");
       
       if (team1Score >= targetWinningScore || team2Score >= targetWinningScore) {
-        var gameWinnerMsg = team1Score >= targetWinningScore ? "🎉 Congratulations! Your team won the game!" : "❌ Game Over! Opponents won.";
+        var gameWinnerMsg;
+        if (team1Score >= targetWinningScore && team2Score >= targetWinningScore) {
+          if (team1Score === team2Score) {
+            startNewRound();
+            return;
+          }
+          gameWinnerMsg = team1Score > team2Score
+            ? "Congratulations! Your team won the game!"
+            : "Game Over! Opponents won.";
+        } else {
+          gameWinnerMsg = team1Score >= targetWinningScore
+            ? "Congratulations! Your team won the game!"
+            : "Game Over! Opponents won.";
+        }
         updateStatus(gameWinnerMsg);
         
         setTimeout(function() {
+          document.getElementById('play-field').classList.remove('is-playing');
           document.getElementById('play-field').style.display = 'none';
           document.getElementById('menu-screen').style.display = 'block';
           updateStatus("Press Start Game to Begin");
@@ -887,8 +1189,8 @@
       var t1BidTotal = (currentBids[0] === -1 || currentBids[2] === -1) ? '?' : (currentBids[0] + currentBids[2]);
       var t2BidTotal = (currentBids[1] === -1 || currentBids[3] === -1) ? '?' : (currentBids[1] + currentBids[3]);
       
-      document.getElementById('stats-t1').innerHTML = "Bids: " + b0 + "+" + b2 + " (<b>Total: " + t1BidTotal + "</b>) | Tricks Won: <b>" + (currentTricks[0] + currentTricks[2]) + "</b>";
-      document.getElementById('stats-t2').innerHTML = "Bids: " + b1 + "+" + b3 + " (<b>Total: " + t2BidTotal + "</b>) | Tricks Won: <b>" + (currentTricks[1] + currentTricks[3]) + "</b>";
+      document.getElementById('stats-t1').innerHTML = "Bids: " + b0 + "+" + b2 + " (<b>Total: " + t1BidTotal + "</b>) | Tricks: <b>" + (currentTricks[0] + currentTricks[2]) + "</b> | Bags: <b>" + team1Bags + "</b>";
+      document.getElementById('stats-t2').innerHTML = "Bids: " + b1 + "+" + b3 + " (<b>Total: " + t2BidTotal + "</b>) | Tricks: <b>" + (currentTricks[1] + currentTricks[3]) + "</b> | Bags: <b>" + team2Bags + "</b>";
 
       var dealerName = currentDealer === 0 ? "You" : "Player " + currentDealer;
       document.getElementById('meta-game-info').textContent = "Dealer Button: " + dealerName + " | Winning Limit Goal: " + targetWinningScore + " Points";
@@ -904,19 +1206,7 @@
 
 
     function renderOpponentBacks() {
-      for (var p = 1; p <= 3; p++) {
-        var row = document.getElementById('backs-p' + p);
-        if (!row) continue;
-        row.innerHTML = '';
-        var cardCount = players[p] ? players[p].length : 0;
-        var showCount = Math.min(cardCount, 8);
-        for (var i = 0; i < showCount; i++) {
-          var div = document.createElement('div');
-          div.className = 'opponent-back-card';
-          div.innerHTML = '<img src="' + CARD_BACK_PATH + '" alt="card back">';
-          row.appendChild(div);
-        }
-      }
+      return;
     }
 
     function updateTableUI() {
@@ -946,34 +1236,17 @@
           btn.innerHTML = '<img src="' + card.path + '" alt="' + card.name + '">';
 
           var playable = true;
-          if (isYourTurn && cardsOnTable.length > 0) {
-            var hasLeadSuit = false;
-            
-            if (leadSuit === 'Wild' || leadSuit === 'Doves') {
-              hasLeadSuit = players[0].some(function(c) { return c.isTrump; });
-            } else {
-              hasLeadSuit = players[0].some(function(c) { return c.suit === leadSuit; });
+          if (isYourTurn) {
+            var legal = getLegalCards(players[0]);
+            playable = legal.some(function (c) { return c === card; });
+            if (playable && isTitusCard(card) && trickContainsActsInLeadSuit()) {
+              var hasAnotherLegalChoice = legal.some(function (otherCard) {
+                return otherCard !== card && !isTitusCard(otherCard);
+              });
+              if (hasAnotherLegalChoice) playable = false;
             }
-
-            if (hasLeadSuit) {
-              if ((leadSuit === 'Wild' || leadSuit === 'Doves') && !card.isTrump) playable = false;
-              // If a non-trump suit is led, TOP-C allows trump to be played anytime.
-              if (leadSuit !== 'Wild' && leadSuit !== 'Doves' && card.suit !== leadSuit && !card.isTrump) playable = false;
-            }
-          } else if (isYourTurn && cardsOnTable.length === 0) {
-            // TOP-C rule: Doves, Rod, and Staff may be led anytime.
-            playable = true;
           } else {
             playable = false;
-          }
-
-          if (playable && isTitusCard(card) && trickContainsActsInLeadSuit()) {
-            var hasAnotherLegalChoice = players[0].some(function(otherCard) {
-              if (otherCard === card) return false;
-              if (leadSuit === 'Wild' || leadSuit === 'Doves') return otherCard.isTrump;
-              return otherCard.suit === leadSuit || otherCard.isTrump;
-            });
-            if (hasAnotherLegalChoice) playable = false;
           }
 
           if (!playable) btn.disabled = true;

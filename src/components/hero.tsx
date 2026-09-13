@@ -20,7 +20,7 @@ const benefits = [
     text: (
       <>
         <span className="font-semibold text-brand">Over 16 original games</span>{" "}
-        — including <em>Bible Bid</em>, <em>Spread Love</em>, <em>Fly Over</em>,
+        — including <em>Bible Bid</em>, <em>Fly Over</em>, <em>Spread Love</em>,
         and <em>Declaration</em>
       </>
     ),
