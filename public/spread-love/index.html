@@ -244,7 +244,7 @@
       display: flex;
       justify-content: center;
       flex-wrap: nowrap; 
-      padding-left: 25px; 
+      padding: 18px 0 0 25px; 
     }
     
     .card-btn {
@@ -256,7 +256,7 @@
       height: 120px; 
       margin-left: -25px; 
       position: relative;
-      transition: transform 0.15s ease-out, filter 0.2s, z-index 0.1s;
+      transition: transform 0.15s ease-out, filter 0.2s, margin 0.15s ease-out, z-index 0.1s;
       z-index: 1;
     }
     .card-btn img {
@@ -267,9 +267,22 @@
       display: block;
     }
     
-    .card-btn:hover {
-      transform: translateY(-30px); 
-      z-index: 100 !important; 
+    .card-btn:not(:disabled):hover,
+    .card-btn:not(:disabled):focus-visible,
+    .card-btn:not(:disabled):active {
+      transform: translateY(-22px); 
+      z-index: 30;
+      margin-right: 16px;
+    }
+    .card-btn:not(:disabled):hover + .card-btn,
+    .card-btn:not(:disabled):focus-visible + .card-btn,
+    .card-btn:not(:disabled):active + .card-btn {
+      transform: translateX(10px);
+    }
+    .card-btn:disabled:hover,
+    .card-btn:disabled:active {
+      transform: none;
+      margin-right: 0;
     }
     .card-btn:disabled {
       cursor: default;
@@ -399,13 +412,24 @@
         padding: 2px 8px 4px;
       }
       .hand-container h3 { display: none; }
-      .hand-cards { padding-left: 16px; }
+      .hand-cards { padding: 14px 8px 0 16px; }
       .card-btn {
         width: 48px;
         height: 72px;
         margin-left: -16px;
       }
-      .card-btn:hover { transform: translateY(-10px); }
+      .card-btn:not(:disabled):hover,
+      .card-btn:not(:disabled):focus-visible,
+      .card-btn:not(:disabled):active {
+        transform: translateY(-12px);
+        margin-right: 14px;
+        z-index: 30;
+      }
+      .card-btn:not(:disabled):hover + .card-btn,
+      .card-btn:not(:disabled):focus-visible + .card-btn,
+      .card-btn:not(:disabled):active + .card-btn {
+        transform: translateX(12px);
+      }
       .bid-container { padding: 4px; margin: 0 0 4px; }
       .bid-btn { padding: 8px 10px; margin: 2px; font-size: 13px; min-width: 36px; }
       #status-message {
