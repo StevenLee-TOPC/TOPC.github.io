@@ -218,12 +218,15 @@
       box-shadow: 0 4px 8px rgba(0,0,0,0.5);
       box-sizing: border-box;
       z-index: 4;
+      background: #e8d7b5;
+      overflow: hidden;
     }
     .played-card img {
       width: 100%;
       height: 100%;
       border-radius: 6px;
       display: block;
+      object-fit: cover;
     }
     
     #card-p0 { bottom: 85px; }  
@@ -571,6 +574,16 @@
     
     masterDeck.push({ name: 'Rod', suit: 'Wild', value: 15, face: 15, path: 'Concept/Wild/wild_01.png', isTrump: true });
     masterDeck.push({ name: 'Staff', suit: 'Wild', value: 14, face: 14, path: 'Concept/Wild/wild_02.png', isTrump: true });
+
+    (function preloadCardArt() {
+      for (var i = 0; i < masterDeck.length; i++) {
+        var im = new Image();
+        im.decoding = 'async';
+        im.src = masterDeck[i].path;
+      }
+      var back = new Image();
+      back.src = CARD_BACK_PATH;
+    })();
 
     // --- 2. GAME STATE VARIABLES ---
     var players = [[], [], [], []]; 
@@ -1379,21 +1392,41 @@
       }
     }
 
-
-
     function renderOpponentBacks() {
       return;
     }
 
+    function makePlayedEl(play) {
+      var cardDiv = document.createElement('div');
+      cardDiv.className = 'played-card';
+      cardDiv.id = 'card-p' + vis(play.playerId);
+      cardDiv.dataset.name = play.card.name;
+      var img = document.createElement('img');
+      img.src = play.card.path;
+      img.alt = play.card.name;
+      img.draggable = false;
+      img.decoding = 'async';
+      cardDiv.appendChild(img);
+      return cardDiv;
+    }
+
     function updateTableUI() {
-      clearTable();
+      var table = document.getElementById('table-area');
+      var keep = {};
       for (var i = 0; i < cardsOnTable.length; i++) {
         var play = cardsOnTable[i];
-        var cardDiv = document.createElement('div');
-        cardDiv.className = 'played-card';
-        cardDiv.id = 'card-p' + vis(play.playerId);
-        cardDiv.innerHTML = '<img src="' + play.card.path + '" alt="' + play.card.name + '">';
-        document.getElementById('table-area').appendChild(cardDiv);
+        var id = 'card-p' + vis(play.playerId);
+        keep[id] = true;
+        var existing = document.getElementById(id);
+        if (existing && existing.dataset.name === play.card.name) continue;
+        if (existing && existing.parentNode) existing.parentNode.removeChild(existing);
+        table.appendChild(makePlayedEl(play));
+      }
+      var cards = table.querySelectorAll('.played-card');
+      for (var j = 0; j < cards.length; j++) {
+        if (!keep[cards[j].id] && cards[j].parentNode) {
+          cards[j].parentNode.removeChild(cards[j]);
+        }
       }
     }
 
